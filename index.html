@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@300&display=swap" rel="stylesheet">
+  <script src='vue-2.6.11.js'></script>
+  
+  <script src='js.cookie-2.2.1.min.js'=></script>
+  <script src='main.js'></script>
+  <title>Канбан</title>
+</head>
+<body>
+  <div id="app">
+  <div :class="'edit-form ' + currentTheme" v-if="formShown">
+    <div :class="'close-form ' + currentTheme">
+      <button @click="hideEditForm()">X</button>
+    </div>
+    <p>
+      <div>Описание</div>
+      <input id="modify-description" v-model="currentTask['description']" type="text" /> <!-- :value="currentTask !== null ? currentTask['description'] : ''" type="text" /-->
+    </p>
+    <p>
+      <div>Статус</div>
+      <select id="modify-status" v-model="currentTaskStatus">
+        <option value="planned">Запланировано</option>
+        <option value="in_progress">В работе</option>
+        <option value="completed">Готово</option>
+      </select>
+    </p>
+    <p>
+      <div>Ответственный</div>
+      <input id="modify-assignee" v-model="currentTask['assignee']" type="text" />
+    </p>
+    <div v-if="showStart">
+    <p>
+      <div>Дата и время начала</div>
+      <input id="modify-start" v-model="currentTask['start_date']" type="text" />
+    </p>
+    </div>
+    <div v-if="showEnd">
+    <p> 
+      <div>Дата и время окончания</div>
+      <input id="modify-end" value="" type="text" v-model="currentTask['end_date']" />
+    </p>
+    </div>
+    <p>
+      <button class="complete" v-if="status != 'completed'" @click="saveEditForm()"></button>
+    </p>
+  </div>
+  <header>
+    <h1>Мой канбан</h1>
+    <div :class="'switch-box ' + currentTheme">
+      <p><theme-cell></theme-cell></p>
+      <!--переключатель-->
+      <div>
+        <label class="switch">
+        <input type="checkbox">
+        <span @click="switchTheme" class="slider round"></span>
+        </label>
+     </div> 
+    </div>
+  </header>
+  
+  <!--создание карточек-->
+  <div>
+
+    <add-task />
+
+  </div>
+ 
+  <!--поле работы с карточками-->
+  <div class="fields">
+    <template v-for="status in categories">
+      <panel-cell :status="status"></panel-cell>
+    </template>
+  </div>
+  </div>
+  <script>
+    
+  </script>
+  <script type="application/javascript">
+	  const app = (function() {
+		  const tasks = {
+			  'planned': [],
+			  'in_progress': [],
+			  'completed': []
+		  };
+		  //console.log('Creating app');
+		  return createApp(tasks);
+	  })();
+	  setBodyTheme(getCookie('currentTheme', 'light'));
+          //console.log(app);
+  </script>	
+</body>
+</html>
